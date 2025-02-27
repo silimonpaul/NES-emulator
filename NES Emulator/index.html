@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" type="text/css" href="./styles.css" />
+    <title>N.E.S Emulator</title>
+  </head>
+  <body>
+    <div class="controls">
+      <input id="rom" type="file" accept=".nes,.NES,.zip,.ZIP" />
+      <!-- <button id="pause">Pause</button>
+      <button id="reset">Reset</button> -->
+      <button id="fullscreen">Fullscreen</button>
+      <button id="toggleLog">Toggle Log</button>
+      <button id="configControls">Configure Controls</button>
+      <button id="saveState">Save State</button>
+      <button id="loadState">Load State</button>
+      <!-- <a href="/download" class="download-button">Download Project</a> -->
+    </div>
+
+    <div id="controlsModal" class="modal">
+      <div class="modal-content">
+        <h2>Configure Controls</h2>
+        <div class="player-controls">
+          <div class="player">
+            <h3>Player 1</h3>
+            <div class="control-row">
+              <label for="player1-up">Up: </label>
+              <div class="control-buttons">
+                <button
+                  id="player1-up-key"
+                  class="bind-key"
+                  data-player="1"
+                  data-control="UP"
+                >
+                  ArrowUp
+                </button>
+              </div>
+            </div>
+            <div class="control-row">
+              <label for="player1-down">Down: </label>
+              <button
+                id="player1-down"
+                class="bind-key"
+                data-player="1"
+                data-control="DOWN"
+              >
+                ArrowDown
+              </button>
+            </div>
+            <div class="control-row">
+              <label for="player1-left">Left: </label>
+              <button
+                id="player1-left"
+                class="bind-key"
+                data-player="1"
+                data-control="LEFT"
+              >
+                ArrowLeft
+              </button>
+            </div>
+            <div class="control-row">
+              <label for="player1-right">Right: </label>
+              <button
+                id="player1-right"
+                class="bind-key"
+                data-player="1"
+                data-control="RIGHT"
+              >
+                ArrowRight
+              </button>
+            </div>
+            <div class="control-row">
+              <label for="player1-a">A: </label>
+              <button
+                id="player1-a"
+                class="bind-key"
+                data-player="1"
+                data-control="A"
+              >
+                X
+              </button>
+            </div>
+            <div class="control-row">
+              <label for="player1-b">B: </label>
+              <button
+                id="player1-b"
+                class="bind-key"
+                data-player="1"
+                data-control="B"
+              >
+                Z
+              </button>
+            </div>
+            <div class="control-row">
+              <label for="player1-start">Start: </label>
+              <button
+                id="player1-start"
+                class="bind-key"
+                data-player="1"
+                data-control="START"
+              >
+                Enter
+              </button>
+            </div>
+            <div class="control-row">
+              <label for="player1-select">Select: </label>
+              <button
+                id="player1-select"
+                class="bind-key"
+                data-player="1"
+                data-control="SELECT"
+              >
+                Shift
+              </button>
+            </div>
+          </div>
+          <div class="player">
+            <h3>Player 2</h3>
+            <div class="control-row">
+              <label for="player2-up">Up: </label>
+              <button
+                id="player2-up"
+                class="bind-key"
+                data-player="2"
+                data-control="UP"
+              >
+                I
+              </button>
+            </div>
+            <div class="control-row">
+              <label for="player2-down">Down: </label>
+              <button
+                id="player2-down"
+                class="bind-key"
+                data-player="2"
+                data-control="DOWN"
+              >
+                K
+              </button>
+            </div>
+            <div class="control-row">
+              <label for="player2-left">Left: </label>
+              <button
+                id="player2-left"
+                class="bind-key"
+                data-player="2"
+                data-control="LEFT"
+              >
+                J
+              </button>
+            </div>
+            <div class="control-row">
+              <label for="player2-right">Right: </label>
+              <button
+                id="player2-right"
+                class="bind-key"
+                data-player="2"
+                data-control="RIGHT"
+              >
+                L
+              </button>
+            </div>
+            <div class="control-row">
+              <label for="player2-a">A: </label>
+              <button
+                id="player2-a"
+                class="bind-key"
+                data-player="2"
+                data-control="A"
+              >
+                G
+              </button>
+            </div>
+            <div class="control-row">
+              <label for="player2-b">B: </label>
+              <button
+                id="player2-b"
+                class="bind-key"
+                data-player="2"
+                data-control="B"
+              >
+                T
+              </button>
+            </div>
+            <div class="control-row">
+              <label for="player2-start">Start: </label>
+              <button
+                id="player2-start"
+                class="bind-key"
+                data-player="2"
+                data-control="START"
+              >
+                P
+              </button>
+            </div>
+            <div class="control-row">
+              <label for="player2-select">Select: </label>
+              <button class="bind-key" data-player="2" data-control="SELECT">
+                O
+              </button>
+            </div>
+          </div>
+        </div>
+        <button id="closeModal">Close</button>
+      </div>
+    </div>
+
+    <canvas id="output"></canvas>
+    <pre id="log"></pre>
+    <div id="saveIndicator" class="save-indicator"></div>
+
+    <script src="lib/zip.js"></script>
+    <script src="lib/inflate.js"></script>
+
+    <!-- Load NES core first -->
+    <script src="nes/mappers.js"></script>
+    <script src="mappers/nrom.js"></script>
+    <script src="mappers/mmc1.js"></script>
+    <script src="mappers/uxrom.js"></script>
+    <script src="mappers/cnrom.js"></script>
+    <script src="mappers/mmc3.js"></script>
+    <script src="mappers/axrom.js"></script>
+
+    <script src="nes/cpu.js"></script>
+    <script src="nes/pipu.js"></script>
+    <script src="nes/apu.js"></script>
+    <script src="nes/nes.js"></script>
+
+    <!-- Load application scripts last -->
+    <script src="./nes/webgl-renderer.js"></script>
+    <script src="./js/audio-worklet.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
